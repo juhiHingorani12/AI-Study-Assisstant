@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="shell">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                <span>StudyAI</span>
+            </div>
+            <button class="icon-btn" id="new-chat-btn" title="New session">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+        </div>
+
+        <!-- Source Section -->
+        <div class="sb-section">
+            <p class="sb-label">Input Source</p>
+            <button class="sb-item active" id="sb-paste" onclick="switchSource('paste')">
+                <span class="sb-item-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Paste Notes</span>
+                    <span class="sb-item-desc">Type or paste text</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-file" onclick="switchSource('file')">
+                <span class="sb-item-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Upload File</span>
+                    <span class="sb-item-desc">PDF, DOCX, TXT</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-youtube" onclick="switchSource('youtube')">
+                <span class="sb-item-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">YouTube</span>
+                    <span class="sb-item-desc">Video with captions</span>
+                </span>
+            </button>
+        </div>
+
+        <!-- Task Section -->
+        <div class="sb-section">
+            <p class="sb-label">Study Task</p>
+            <button class="sb-item active" id="sb-task-1" onclick="switchTask('1')">
+                <span class="sb-item-icon">📝</span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Summarize</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-task-2" onclick="switchTask('2')">
+                <span class="sb-item-icon">💡</span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Explain</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-task-3" onclick="switchTask('3')">
+                <span class="sb-item-icon">🧠</span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Generate Quiz</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-task-4" onclick="switchTask('4')">
+                <span class="sb-item-icon">🔑</span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Key Points</span>
+                </span>
+            </button>
+            <button class="sb-item" id="sb-task-5" onclick="switchTask('5')">
+                <span class="sb-item-icon">🎓</span>
+                <span class="sb-item-text">
+                    <span class="sb-item-title">Viva Q&amp;A</span>
+                </span>
+            </button>
+        </div>
+
+
+    </aside>
+
+    <!-- ── Main ── -->
+    <div class="main" id="main">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <button class="icon-btn toggle-btn" id="toggle-sidebar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <div class="topbar-right">
+                <div class="model-badge">StudyAI</div>
+            </div>
+        </header>
+
+        <!-- Chat area -->
+        <div class="chat-area" id="chat-area">
+
+            {% if not result %}
+            <div class="empty-state" id="empty-state">
+                <div class="empty-icon">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <h1 class="empty-title">What are you studying today?</h1>
+                <p class="empty-sub">Choose a source from the sidebar, paste or upload your material, then hit send.</p>
+                <div class="suggestion-grid">
+                    <button class="suggestion-card" onclick="fillSuggestion('Summarize my lecture notes on the water cycle')">
+                        <span class="suggestion-icon">📝</span>
+                        <span class="suggestion-text">Summarize lecture notes</span>
+                    </button>
+                    <button class="suggestion-card" onclick="fillSuggestion('Generate a quiz from my biology chapter')">
+                        <span class="suggestion-icon">🧠</span>
+                        <span class="suggestion-text">Generate a practice quiz</span>
+                    </button>
+                    <button class="suggestion-card" onclick="fillSuggestion('Extract key points from my economics notes')">
+                        <span class="suggestion-icon">🔑</span>
+                        <span class="suggestion-text">Extract key points</span>
+                    </button>
+                    <button class="suggestion-card" onclick="fillSuggestion('Prepare viva questions from my notes')">
+                        <span class="suggestion-icon">🎓</span>
+                        <span class="suggestion-text">Prepare viva questions</span>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="msg-row msg-row--ai">
+                <div class="msg-avatar msg-avatar--ai">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="msg-bubble msg-bubble--error">{{ error }}</div>
+            </div>
+            {% endif %}
+
+            {% if result %}
+            <div class="msg-row msg-row--user">
+                <div class="msg-bubble msg-bubble--user">Study output request</div>
+                <div class="msg-avatar msg-avatar--user">S</div>
+            </div>
+            <div class="msg-row msg-row--ai">
+                <div class="msg-avatar msg-avatar--ai">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="msg-bubble msg-bubble--ai">
+                    <div class="result-content">{{ result | safe }}</div>
+                    <div class="msg-actions">
+                        <button class="msg-action-btn" onclick="copyResult()">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Loader -->
+            <div id="loader" class="msg-row msg-row--ai hidden">
+                <div class="msg-avatar msg-avatar--ai">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                </div>
+                <div class="msg-bubble msg-bubble--ai typing-bubble">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── Input dock (NO source pills here) ── -->
+        <div class="input-dock">
+            <form method="POST" action="/generate" enctype="multipart/form-data" id="main-form" onsubmit="handleSubmit()">
+
+                <input type="hidden" name="input_type" id="input_type_hidden" value="paste">
+                <input type="hidden" name="task_choice" id="task_choice_hidden" value="1">
+
+                <!-- Paste -->
+                <div class="input-panel" id="panel-paste">
+                    <textarea name="notes" id="notes-ta" placeholder="Paste your notes or study material here…" rows="1"></textarea>
+                </div>
+
+                <!-- File -->
+                <div class="input-panel hidden" id="panel-file">
+                    <div class="file-inline">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <label for="file-input" class="file-label">Choose file</label>
+                        <input type="file" name="file" id="file-input" accept=".pdf,.txt,.docx">
+                        <span class="file-name" id="file-name">PDF, DOCX, TXT</span>
+                    </div>
+                </div>
+
+                <!-- YouTube -->
+                <div class="input-panel hidden" id="panel-youtube">
+                    <input type="text" name="youtube_url" id="yt-input" placeholder="Paste YouTube URL…">
+                </div>
+
+                <div class="send-row">
+                    <span class="char-hint" id="char-hint"></span>
+                    <button type="submit" class="send-btn" id="send-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
