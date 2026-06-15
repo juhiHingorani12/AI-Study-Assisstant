@@ -71,4 +71,8 @@ Future Improvements
 
 Author
 
+<<<<<<< HEAD
 Juhi Hingorani
+=======
+Juhi Hingorani
+>>>>>>> a2cf1108106d44b0f1e4f05bbf18ae6c189df440
