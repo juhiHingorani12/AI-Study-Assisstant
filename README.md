@@ -69,6 +69,24 @@ Future Improvements
 - Advanced YouTube Lecture Analysis
 - Multi-language Support
 
+## Screenshots
+
+### Homepage
+
+![Homepage](images/homepage.png)
+
+### Notes Summary
+
+![Notes Summary](notes_summary.png)
+
+### PDF EXPLAIN
+
+![PDF Analysis](pdf_explain.png)
+
+### YouTube KEYPOINTS
+
+![YouTube Analysis](youtube_keypoints.png)
+
 Author
 
 <<<<<<< HEAD
