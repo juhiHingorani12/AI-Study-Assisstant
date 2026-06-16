@@ -77,20 +77,16 @@ Future Improvements
 
 ### Notes Summary
 
-![Notes Summary](notes_summary.png)
+![Notes Summary](images/notes_summary.png)
 
 ### PDF EXPLAIN
 
-![PDF Analysis](pdf_explain.png)
+![PDF Analysis](images/pdf_explain.png)
 
 ### YouTube KEYPOINTS
 
-![YouTube Analysis](youtube_keypoints.png)
+![YouTube Analysis](images/youtube_keypoints.png)
 
 Author
 
-<<<<<<< HEAD
 Juhi Hingorani
-=======
-Juhi Hingorani
->>>>>>> a2cf1108106d44b0f1e4f05bbf18ae6c189df440
