@@ -1,5 +1,0 @@
-Artificial Intelligence (AI) is a technology that enables machines to perform tasks 
-that normally require human intelligence. It can learn from data, recognize patterns,
- and make decisions. AI is used in virtual assistants, recommendation systems, 
- healthcare, and many other fields. It helps improve efficiency and automate repetitive 
- tasks. AI is one of the fastest-growing areas of computer science.
